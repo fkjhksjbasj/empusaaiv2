@@ -87,7 +87,7 @@ async function boot() {
       // Reconcile tracked positions against on-chain token balances
       await scalper.reconcileOnChain();
       // Init 5m scalper with the same CLOB client
-      fiveMinScalper.init(orderClient);
+      fiveMinScalper.init(clobOrders);
     } catch (e) {
       const msg = e instanceof Error ? e.message : (typeof e === "string" ? e : JSON.stringify(e));
       serr(`[Server] CLOB init failed, falling back to paper: ${msg}`);
