@@ -17,6 +17,7 @@ import { PolymarketWS } from "./lib/polymarket-ws.js";
 import { ClobOrders } from "./lib/clob-orders.js";
 import * as api from "./lib/polymarket-api.js";
 import * as supa from "./lib/supabase.js";
+import { FiveMinScalper } from "./lib/five-min-scalper.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 3000;
@@ -33,6 +34,7 @@ const DASHBOARD_WS_MS = 1000;    // 1s — push state to dashboard
 
 // ─── Core ─────────────────────────────────────────
 const scalper = new Scalper();
+const fiveMinScalper = new FiveMinScalper();
 let binance = null;
 let chainlink = null;
 let multiExchange = null;
@@ -84,6 +86,8 @@ async function boot() {
       } catch {}
       // Reconcile tracked positions against on-chain token balances
       await scalper.reconcileOnChain();
+      // Init 5m scalper with the same CLOB client
+      fiveMinScalper.init(orderClient);
     } catch (e) {
       const msg = e instanceof Error ? e.message : (typeof e === "string" ? e : JSON.stringify(e));
       serr(`[Server] CLOB init failed, falling back to paper: ${msg}`);
@@ -99,6 +103,8 @@ async function boot() {
     scalper.updateLiveBinance(data);
     // Feed Binance prices to multi-exchange aggregator
     if (multiExchange) multiExchange.updateBinance(data);
+    // Feed BTC price to 5m scalper
+    if (data.BTC) fiveMinScalper.updatePrice(data.BTC.price);
   });
   binance.connect();
 
@@ -129,6 +135,7 @@ async function boot() {
   slog("[Server] Fetching Polymarket crypto markets...");
   await scalper.refreshMarkets().catch(e => serr("[Server] Market fetch:", e.message));
   slog(`[Server] ${scalper.markets.length} markets loaded`);
+  fiveMinScalper.updateMarkets(scalper.markets);
 
   // 9. Subscribe CLOB WS to market token IDs for live prices
   subscribeClobTokens();
@@ -180,10 +187,18 @@ function startLoops() {
     try {
       await scalper.refreshMarkets();
       subscribeClobTokens();
+      fiveMinScalper.updateMarkets(scalper.markets);
     } catch (e) {
       serr("[Server] Market refresh error:", e.message);
     }
   }, MARKET_REFRESH_MS);
+
+  // 5m scalper tick every 1s
+  setInterval(async () => {
+    try { await fiveMinScalper.tick(); } catch (e) {
+      serr("[Server] 5m scalp tick error:", e.message);
+    }
+  }, 1000);
 
   // Flush bot logs to Supabase every 3s
   setInterval(async () => {
@@ -239,6 +254,7 @@ function buildState() {
     chainlink: chainlink ? chainlink.getStats() : null,
     multiExchange: multiExchange ? multiExchange.getStats() : null,
     polyWs: polyWs ? polyWs.getStats() : null,
+    fiveMin: fiveMinScalper.getState(),
     uptime: process.uptime(),
     ts: Date.now(),
   };
