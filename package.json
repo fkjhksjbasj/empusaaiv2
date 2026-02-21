@@ -7,6 +7,9 @@
   "scripts": {
     "start": "node server.js"
   },
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "dependencies": {
     "@polymarket/clob-client": "^5.2.3",
     "@supabase/supabase-js": "^2.96.0",
