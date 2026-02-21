@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-row">
+      <div class="header-left">
+        <div class="logo">PW</div>
+        <span class="app-name">PolyWhale</span>
+      </div>
+      <div class="header-right">
+        <div class="status" id="status">
+          <div class="status-dot"></div>
+          <span id="status-text">Connecting</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- METRICS -->
+  <div class="metrics">
+    <div class="metric-box">
+      <div class="metric-label">P&L</div>
+      <div class="metric-value" id="metric-pnl">$0.00</div>
+    </div>
+    <div class="metric-box">
+      <div class="metric-label">Bets</div>
+      <div class="metric-value" id="metric-bets">0</div>
+    </div>
+    <div class="metric-box">
+      <div class="metric-label">Win%</div>
+      <div class="metric-value" id="metric-win">0%</div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" data-tab="scalper">Scalper</button>
+    <button class="tab" data-tab="logs">Logs</button>
+  </div>
+
+  <!-- PANELS -->
+  <div class="content">
+
+    <!-- SCALPER -->
+    <div class="panel active" id="panel-scalper">
+      <div class="section-label" style="display:flex;justify-content:space-between;align-items:center">
+        Open <span class="muted" id="pos-count">(0)</span>
+        <button class="btn-outline btn-sm" id="btn-reset-scalper">Reset</button>
+      </div>
+      <div id="positions-list">
+        <div class="empty">Scanning...</div>
+      </div>
+      <div class="divider"></div>
+      <div class="section-label">Closed <span class="muted" id="trade-count">(0)</span></div>
+      <div id="history-list">
+        <div class="empty">No trades yet</div>
+      </div>
+    </div>
+
+    <!-- LOGS -->
+    <div class="panel" id="panel-logs">
+      <div class="section-label" style="display:flex;justify-content:space-between;align-items:center">
+        Live Log
+        <button class="btn-outline btn-sm" id="btn-clear-logs">Clear</button>
+      </div>
+      <div id="logs-list" class="logs-container"></div>
+    </div>
+  </div>
+
+  <script src="popup.js" type="module"></script>
+</body>
+</html>

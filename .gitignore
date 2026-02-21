@@ -1,0 +1,11 @@
+node_modules/
+.env
+.env.*
+data/
+*.log
+tradingbot.log
+nul
+c?tradingbot*
+daemon/*.exe
+daemon/*.config
+query

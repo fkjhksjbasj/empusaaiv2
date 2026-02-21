@@ -1,0 +1,18 @@
+{
+  "name": "polywhale",
+  "version": "2.0.0",
+  "type": "module",
+  "description": "Polymarket crypto scalper — real-time signals via Binance WebSocket",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@polymarket/clob-client": "^5.2.3",
+    "@supabase/supabase-js": "^2.96.0",
+    "dotenv": "^17.3.1",
+    "ethers": "^5.8.0",
+    "node-windows": "^1.0.0-beta.8",
+    "ws": "^8.18.0"
+  }
+}

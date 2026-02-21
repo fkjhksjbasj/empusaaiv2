@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PolyWhale</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Top Bar -->
+  <header>
+    <div class="header-left">
+      <span class="logo">PolyWhale</span>
+    </div>
+    <div class="header-right">
+      <span id="ws-status" class="dot green"></span>
+      <span id="ws-label">Live</span>
+      <span class="header-sep">|</span>
+      <span id="binance-status">Binance: --</span>
+      <span class="header-sep">|</span>
+      <span id="chainlink-status">Chainlink: --</span>
+      <span class="header-sep">|</span>
+      <span id="exchange-status">Feeds: --</span>
+      <span class="header-sep">|</span>
+      <span id="clob-status">CLOB: --</span>
+      <span class="header-sep">|</span>
+      <span id="uptime">--</span>
+    </div>
+  </header>
+
+  <!-- Portfolio Summary -->
+  <div class="portfolio-header">
+    <div class="portfolio-value">
+      <div class="portfolio-label">Portfolio</div>
+      <div class="portfolio-amount" id="total-balance">$6.00</div>
+    </div>
+    <div class="portfolio-stats">
+      <div class="portfolio-stat">
+        <span class="ps-label">Profit / Loss</span>
+        <span class="ps-value" id="total-pnl">+$0.00</span>
+      </div>
+      <div class="portfolio-stat">
+        <span class="ps-label">Today</span>
+        <span class="ps-value" id="daily-pnl">+$0.00</span>
+      </div>
+      <div class="portfolio-stat">
+        <span class="ps-label">Deposited</span>
+        <span class="ps-value" id="bankroll-start">$6.00</span>
+      </div>
+      <div class="portfolio-stat">
+        <span class="ps-label">In Positions</span>
+        <span class="ps-value" id="bankroll-locked">$0.00</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <nav>
+    <button class="tab active" data-tab="positions">Positions <span class="tab-count" id="tab-pos-count">0</span></button>
+    <button class="tab" data-tab="activity">Activity</button>
+    <button class="tab" data-tab="markets">Markets <span class="tab-count" id="tab-mkt-count">0</span></button>
+    <button class="tab" data-tab="performance">Stats</button>
+    <button class="tab" data-tab="logs">Logs</button>
+  </nav>
+
+  <main>
+    <!-- Positions Tab -->
+    <section id="tab-positions" class="tab-content active">
+      <div id="positions" class="positions-list">
+        <div class="empty-state">No open positions</div>
+      </div>
+    </section>
+
+    <!-- Activity Tab -->
+    <section id="tab-activity" class="tab-content">
+      <div id="history" class="activity-list">
+        <div class="empty-state">No trades yet</div>
+      </div>
+    </section>
+
+    <!-- Markets Tab -->
+    <section id="tab-markets" class="tab-content">
+      <div class="section-header">
+        <span>Active Markets</span>
+      </div>
+      <div id="markets-list" class="markets-list">
+        <div class="empty-state">Loading markets...</div>
+      </div>
+    </section>
+
+    <!-- Stats Tab -->
+    <section id="tab-performance" class="tab-content">
+      <div class="perf-grid">
+        <div class="perf-card">
+          <div class="perf-label">Win Rate</div>
+          <div class="perf-value" id="win-rate">0%</div>
+        </div>
+        <div class="perf-card">
+          <div class="perf-label">Total Trades</div>
+          <div class="perf-value" id="total-bets">0</div>
+        </div>
+        <div class="perf-card">
+          <div class="perf-label">Won</div>
+          <div class="perf-value green" id="stat-wins">0</div>
+        </div>
+        <div class="perf-card">
+          <div class="perf-label">Lost</div>
+          <div class="perf-value red" id="stat-losses">0</div>
+        </div>
+        <div class="perf-card">
+          <div class="perf-label">Open</div>
+          <div class="perf-value" id="open-count">0</div>
+        </div>
+        <div class="perf-card">
+          <div class="perf-label">Probes Proven</div>
+          <div class="perf-value" id="probe-stats">0/0</div>
+        </div>
+      </div>
+
+      <div class="section-header">Execution</div>
+      <div class="perf-grid">
+        <div class="perf-card">
+          <div class="perf-label">Fills / Fails</div>
+          <div class="perf-value" id="exec-fills">0 / 0</div>
+        </div>
+        <div class="perf-card">
+          <div class="perf-label">Slippage</div>
+          <div class="perf-value" id="exec-slippage">$0.00</div>
+        </div>
+        <div class="perf-card">
+          <div class="perf-label">Spread Cost</div>
+          <div class="perf-value" id="exec-spread">$0.00</div>
+        </div>
+        <div class="perf-card">
+          <div class="perf-label">Mode</div>
+          <div class="perf-value" id="exec-mode">--</div>
+        </div>
+      </div>
+
+      <div class="section-header">Live Prices — Multi-Exchange Prediction</div>
+      <div class="price-compare-grid">
+        <div class="price-compare-row" id="price-btc">
+          <div class="price-asset">BTC</div>
+          <div class="price-col"><div class="price-source">Binance</div><div class="price-val" id="binance-btc">--</div></div>
+          <div class="price-col"><div class="price-source">Coinbase</div><div class="price-val" id="coinbase-btc">--</div></div>
+          <div class="price-col"><div class="price-source">Kraken</div><div class="price-val" id="kraken-btc">--</div></div>
+          <div class="price-col"><div class="price-source">Predicted</div><div class="price-val predicted-price" id="predicted-btc">--</div></div>
+          <div class="price-col"><div class="price-source">Chainlink</div><div class="price-val" id="chainlink-btc">--</div></div>
+        </div>
+        <div class="price-compare-row" id="price-eth">
+          <div class="price-asset">ETH</div>
+          <div class="price-col"><div class="price-source">Binance</div><div class="price-val" id="binance-eth">--</div></div>
+          <div class="price-col"><div class="price-source">Coinbase</div><div class="price-val" id="coinbase-eth">--</div></div>
+          <div class="price-col"><div class="price-source">Kraken</div><div class="price-val" id="kraken-eth">--</div></div>
+          <div class="price-col"><div class="price-source">Predicted</div><div class="price-val predicted-price" id="predicted-eth">--</div></div>
+          <div class="price-col"><div class="price-source">Chainlink</div><div class="price-val" id="chainlink-eth">--</div></div>
+        </div>
+        <div class="price-compare-row" id="price-sol">
+          <div class="price-asset">SOL</div>
+          <div class="price-col"><div class="price-source">Binance</div><div class="price-val" id="binance-sol">--</div></div>
+          <div class="price-col"><div class="price-source">Coinbase</div><div class="price-val" id="coinbase-sol">--</div></div>
+          <div class="price-col"><div class="price-source">Kraken</div><div class="price-val" id="kraken-sol">--</div></div>
+          <div class="price-col"><div class="price-source">Predicted</div><div class="price-val predicted-price" id="predicted-sol">--</div></div>
+          <div class="price-col"><div class="price-source">Chainlink</div><div class="price-val" id="chainlink-sol">--</div></div>
+        </div>
+      </div>
+
+      <div class="section-header">Data Source</div>
+      <div id="data-source" class="info-text">--</div>
+    </section>
+
+    <!-- Logs Tab -->
+    <section id="tab-logs" class="tab-content">
+      <div class="log-actions">
+        <button id="btn-clear-logs" class="btn-action">Clear Logs</button>
+        <button id="btn-refresh" class="btn-action">Refresh Markets</button>
+        <button id="btn-reset" class="btn-action btn-danger">Reset</button>
+      </div>
+      <div id="log-output" class="log-box"></div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

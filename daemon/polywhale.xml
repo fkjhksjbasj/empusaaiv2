@@ -1,0 +1,31 @@
+<service>
+	<id>polywhale.exe</id>
+	<name>PolyWhale</name>
+	<description>PolyWhale v2 — Polymarket Crypto Scalper</description>
+	<executable>C:\Program Files\nodejs\node.exe</executable>
+	<argument>c:\tradingbot\node_modules\node-windows\lib\wrapper.js</argument>
+	<argument>--file</argument>
+	<argument>c:\tradingbot\server.js</argument>
+	<argument>--scriptoptions=</argument>
+	<argument>--log</argument>
+	<argument>PolyWhale wrapper</argument>
+	<argument>--grow</argument>
+	<argument>0.5</argument>
+	<argument>--wait</argument>
+	<argument>2</argument>
+	<argument>--maxrestarts</argument>
+	<argument>100</argument>
+	<argument>--abortonerror</argument>
+	<argument>n</argument>
+	<argument>--stopparentfirst</argument>
+	<argument>undefined</argument>
+	<logmode>rotate</logmode>
+	<stoptimeout>30sec</stoptimeout>
+	<env name="NODE_ENV" value="production"/>
+	<serviceaccount>
+		<domain>LAPTOP-MOG1UUVP</domain>
+		<user>LocalSystem</user>
+		<password></password>
+	</serviceaccount>
+	<workingdirectory>c:\tradingbot</workingdirectory>
+</service>
