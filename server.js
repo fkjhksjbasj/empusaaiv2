@@ -84,10 +84,11 @@ async function boot() {
           slog(`[Server] Bankroll set to wallet balance: $${walletBal.toFixed(2)}`);
         }
       } catch {}
+      // Init 5m scalper with the same CLOB client (before reconcile — can't be blocked)
+      fiveMinScalper.init(clobOrders);
+      slog("[Server] 5m scalper initialized with CLOB client");
       // Reconcile tracked positions against on-chain token balances
       await scalper.reconcileOnChain();
-      // Init 5m scalper with the same CLOB client
-      fiveMinScalper.init(clobOrders);
     } catch (e) {
       const msg = e instanceof Error ? e.message : (typeof e === "string" ? e : JSON.stringify(e));
       serr(`[Server] CLOB init failed, falling back to paper: ${msg}`);
