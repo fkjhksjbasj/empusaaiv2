@@ -19,7 +19,7 @@ import * as api from "./lib/polymarket-api.js";
 import * as supa from "./lib/supabase.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // ─── Safe logging (Windows stdout can crash process) ─
 function slog(msg) { try { process.stdout.write(msg + "\n"); } catch {} }
@@ -374,7 +374,7 @@ function startHttpServer() {
     crashLog(`[HTTP-ERROR] ${err.message}`);
   });
 
-  server.listen(PORT, () => {
+  server.listen(PORT, "0.0.0.0", () => {
     slog(`[Server] HTTP + WS listening on port ${PORT}`);
   });
 }
